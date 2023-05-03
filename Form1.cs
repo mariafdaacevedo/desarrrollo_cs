@@ -13,7 +13,7 @@ namespace PruebaDesarrollo
         private void Form1_Load(object sender, EventArgs e)
         {
             Conexion.Conectar();
-            MessageBox.Show("conexión exitosa");
+            MessageBox.Show("conexiÃ³n exitosa");
 
             dataGridView1.DataSource = llenar_grid();
         }
@@ -76,20 +76,21 @@ namespace PruebaDesarrollo
                 cmd_estado.ExecuteNonQuery();
 
 
-                int id_cliente = 1;
-                object id_cliente_obj = new SqlCommand("SELECT @@IDENTITY as NUME_DOC", Conexion.Conectar()).ExecuteScalar();
+                 int id_cliente = 1;
+                object id_cliente_obj = new SqlCommand("SELECT IDENT_CURRENT('CLIENTES') as NUME_DOC", Conexion.Conectar()).ExecuteScalar();
                 if (id_cliente_obj != DBNull.Value)
                 {
                     id_cliente = Convert.ToInt32(id_cliente_obj);
-                });
-
+                }
+                
 
                 int id_estado = 1;
-                object id_estado_obj = new SqlCommand("SELECT SCOPE_IDENTITY() as CODI_ESTADO", Conexion.Conectar()).ExecuteScalar();
+                object id_estado_obj = new SqlCommand("SELECT IDENT_CURRENT('ESTADOS_FACTURA') as CODI_ESTADO", Conexion.Conectar()).ExecuteScalar();
                 if (id_estado_obj != DBNull.Value)
                 {
                     id_estado = Convert.ToInt32(id_estado_obj);
                 }
+
 
                 string insertar_factura = "INSERT INTO FACTURA (NUME_DOC, CODI_ESTADO, FECHA_FAC, VALOR_FAC) VALUES (@NUME_DOC, @CODI_ESTADO,@FECHA_FAC, @VALOR_FAC)";
                 SqlCommand cmd_factura = new SqlCommand(insertar_factura, Conexion.Conectar());
@@ -102,14 +103,14 @@ namespace PruebaDesarrollo
                 
                 transaction.Commit();
 
-                MessageBox.Show("Los datos fueron agregados con éxito");
+                MessageBox.Show("Los datos fueron agregados con Ã©xito");
                 dataGridView1.DataSource = llenar_grid();
             }
             catch (Exception ex)
             {
-                // Revertir la transacción en caso de error
+                // Revertir la transacciÃ³n en caso de error
                 transaction.Rollback();
-                MessageBox.Show("Ocurrió un error al agregar los datos: " + ex.Message);
+                MessageBox.Show("OcurriÃ³ un error al agregar los datos: " + ex.Message);
             }
 
         }
